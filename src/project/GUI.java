@@ -1,7 +1,10 @@
 package project;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class is used for ...
@@ -13,6 +16,10 @@ import java.awt.*;
 public class GUI extends JFrame {
 
     private Header headerProject;
+    private JPanel panelPrincipal;
+    private JButton botonJugar, botonSalir, botonSi, botonNo;
+    private Escucha escucha;
+
 
     /**
      * Constructor of GUI class
@@ -22,7 +29,8 @@ public class GUI extends JFrame {
 
         //Default JFrame configuration
         this.setTitle("I Know That Word");
-        this.setSize(300, 300);
+        this.setSize(650, 444);
+        this.setUndecorated(true);
         //this.pack();
         this.setResizable(true);
         this.setVisible(true);
@@ -36,11 +44,57 @@ public class GUI extends JFrame {
      */
     private void initGUI() {
         //Set up JFrame Container's Layout
+        this.getContentPane().setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+
         //Create Listener Object and Control Object
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        this.add(headerProject,constraints);
 
-        this.add(headerProject, BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
+
+        //this.add(headerProject, BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
+
+        botonJugar = new JButton("Jugar");
+        botonJugar.setPreferredSize(new Dimension(325,50));
+        botonJugar.setFont(new Font("MONOSPACED", Font.BOLD,30));
+        botonJugar.setBackground(Color.ORANGE);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        this.add(botonJugar,constraints);
+
+        botonSalir = new JButton("Salir");
+        botonSalir.setPreferredSize(new Dimension(325,50));
+        botonSalir.setFont(new Font("MONOSPACED", Font.BOLD,30));
+        botonSalir.setBackground(Color.ORANGE);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        this.add(botonSalir,constraints);
+
+        panelPrincipal = new JPanel();
+        panelPrincipal.setPreferredSize(new Dimension(650,330));
+        panelPrincipal.setBorder(BorderFactory.createTitledBorder(null, "Memoriza las Palabras", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
+        panelPrincipal.setBackground(Color.GRAY);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        this.add(panelPrincipal,constraints);
+
+        escucha = new Escucha();
+        botonSalir.addActionListener(escucha);
+        botonJugar.addActionListener(escucha);
     }
 
     /**
@@ -58,7 +112,21 @@ public class GUI extends JFrame {
     /**
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
-    private class Escucha {
-
+    private class Escucha implements ActionListener {
+        JTextField cajaTexto;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          if (e.getSource()==botonJugar){
+              cajaTexto = new JTextField("Ingrese su alias");
+              cajaTexto.setBounds(230,100,200,30);
+              //cajaTexto.getText();
+              cajaTexto.setHorizontalAlignment(JTextField.CENTER);
+              panelPrincipal.add(cajaTexto);
+              //panelPrincipal.repaint();
+          }
+          else if (e.getSource()==botonSalir){
+              System.exit(0); //cierra el programa
+          }
+        }
     }
 }
