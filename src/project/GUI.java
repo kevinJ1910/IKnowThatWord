@@ -19,8 +19,8 @@ public class GUI extends JFrame {
     private JPanel panelPrincipal;
     private JButton botonJugar, botonSalir, botonSi, botonNo;
     private Escucha escucha;
-
-
+    private String clave;
+    private ControlIKnowThatWorld controlIKnowThatWorld;
     /**
      * Constructor of GUI class
      */
@@ -48,6 +48,7 @@ public class GUI extends JFrame {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Create Listener Object and Control Object
+        controlIKnowThatWorld = new ControlIKnowThatWorld();
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
         constraints.gridx = 0;
@@ -97,6 +98,11 @@ public class GUI extends JFrame {
         botonJugar.addActionListener(escucha);
     }
 
+    public void reset(String clave) {
+        this.clave = clave;
+        repaint();
+    }
+
     /**
      * Main process of the Java program
      *
@@ -114,6 +120,7 @@ public class GUI extends JFrame {
      */
     private class Escucha implements ActionListener {
         JTextField cajaTexto;
+        private String clave;
         @Override
         public void actionPerformed(ActionEvent e) {
           if (e.getSource()==botonJugar){
@@ -123,7 +130,8 @@ public class GUI extends JFrame {
               cajaTexto.setHorizontalAlignment(JTextField.CENTER);
               panelPrincipal.add(cajaTexto);
               //panelPrincipal.repaint();
-          }
+              }
+
           else if (e.getSource()==botonSalir){
               System.exit(0); //cierra el programa
           }
