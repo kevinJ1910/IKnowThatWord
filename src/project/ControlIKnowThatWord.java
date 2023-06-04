@@ -1,7 +1,6 @@
 package project;
 
 public class ControlIKnowThatWorld {
-
     private Diccionario palabras;
     private String palabra, clave, errores;
     private int conteoErrores;
@@ -17,49 +16,45 @@ public class ControlIKnowThatWorld {
     public String pintarPalabra() {
         //initialization de las variables de control de la ronda de juego
         clave = "";
-        palabra = palabras.getPalabra(); //Obtiene/Saca aleatoriamente la palabra
+        palabra = palabras.obtenerPalabra(); //Obtiene/Saca aleatoriamente la palabra por medio del metodo obtenerPalabra de la clase Diccionario
         errores = "Palabras erroneas: ";
         conteoErrores = 0;
 
-
-
-        //Crear la clave de la palabra
-        for(int i=0; i<palabra.length(); i++) {  //Recorre la palabra obtenida
-            if(palabra.charAt(i) == ' ') {
-                clave += palabra.charAt(i);      // Si hay un espacio en blanco se agrega ese espacio en blanco
-            }else {
-                clave += palabra.charAt(i);     // Si no hay un espacio en blanco se agrega el caracter de la palabra
-            }
-        }
-        return clave;           //Devuelve la clave de la palabra
-
+        return palabra;
     }
 
-    public String validarPalabra(char letra) {
+    public String validarPalabra(String frase) {
         fallo = false;
-        int index = palabra.indexOf(letra);
+        int index = palabra.indexOf(frase); //recibe la frase y busca la primera incidencia que encuentra de esa palabra en la cadena "palabra" y me devuelve el indice de esa primera incidencia
+
         if (index != -1) {
-            while (index > -1) {
-                index = palabra.indexOf(index+1, letra);
-            }
+            index = palabra.indexOf(frase);
         }else {
             fallo = true;
             conteoErrores++;
+            errores += frase + "";
 
         }
-        return clave;
+        return palabra;
     }
-/*
+
     public boolean esGanador() {
+        if (palabra.indexOf(" ") == -1) {
+            ganar = true;
+        }else{
+            ganar = false;
+        }
+        return ganar;
+        /*
         if (clave.indexOf() == -1) {
             ganar = true;
         }else {
             ganar = false;
         }
         return ganar;
+         */
     }
 
- */
 
     public String getClave() {
         return clave;
