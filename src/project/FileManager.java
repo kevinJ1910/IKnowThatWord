@@ -11,20 +11,16 @@ public class FileManager {
     private BufferedWriter output;
 
     public ArrayList<String> lecturaFile() {
-        ArrayList<String> palabras = new ArrayList<String>();
-
-        //String texto = "";
+        ArrayList<String> palabras = new ArrayList<String>(); //crea una coleccion de elementos que van a albergar como informacion un String y va a tener una referencia a otro elemnto del mismmo tipo
 
         try {
             fileReader = new FileReader(PATH);
             input = new BufferedReader(fileReader); //Se captura el contenido del archivo
-            String line = input.readLine();
+            String line = input.readLine();  //Lee cada linea y se almacena en line
 
-            while (line != null) {
-                palabras.add(line);
-                //texto += line;
-                //texto += "\n";
-                line = input.readLine();
+            while (line != null) {  //Mientras siga habiendo mas datos que siga leyendo
+                palabras.add(line); //Agrega las palabras del archivo a la lista
+                line = input.readLine();  //lee la linea
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -22,10 +22,9 @@ public class Diccionario {
         diccionario = fileManager.lecturaFile();
     }
 
-    public String getPalabra() {
+    public String obtenerPalabra() {
         Random aleatorio = new Random();
 
         return diccionario.get(aleatorio.nextInt(diccionario.size())); //Devuelve el String que está contenido en la position de la lista usando un random
-
     }
 }

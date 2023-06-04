@@ -5,6 +5,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * This class is used for ...
@@ -14,13 +15,12 @@ import java.awt.event.ActionListener;
  * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
  */
 public class GUI extends JFrame {
-
     private Header headerProject;
-    private JPanel panelPrincipal;
     private JButton botonJugar, botonSalir, botonSi, botonNo;
     private Escucha escucha;
-    private String clave;
-    private ControlIKnowThatWorld controlIKnowThatWorld;
+    private Timer timer;
+    private ControlIKnowThatWord controlIKnowThatWorld;
+    private PanelPalabras panelPalabras;  //Llama el panelPalabras de la clase PanelPalabras
     /**
      * Constructor of GUI class
      */
@@ -46,9 +46,9 @@ public class GUI extends JFrame {
         //Set up JFrame Container's Layout
         this.getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-
         //Create Listener Object and Control Object
-        controlIKnowThatWorld = new ControlIKnowThatWorld();
+        controlIKnowThatWorld = new ControlIKnowThatWord();
+        escucha = new Escucha();
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
         constraints.gridx = 0;
@@ -57,7 +57,15 @@ public class GUI extends JFrame {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         this.add(headerProject,constraints);
 
-
+        panelPalabras = new PanelPalabras(controlIKnowThatWorld.pintarPalabra());
+        panelPalabras.setBorder(BorderFactory.createTitledBorder(null, "Memoriza las Palabras", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        panelPalabras.setFocusable(true);
+        add(panelPalabras, constraints);
         //this.add(headerProject, BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
         botonJugar = new JButton("Jugar");
@@ -82,25 +90,10 @@ public class GUI extends JFrame {
         constraints.anchor = GridBagConstraints.CENTER;
         this.add(botonSalir,constraints);
 
-        panelPrincipal = new JPanel();
-        panelPrincipal.setPreferredSize(new Dimension(650,330));
-        panelPrincipal.setBorder(BorderFactory.createTitledBorder(null, "Memoriza las Palabras", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
-        panelPrincipal.setBackground(Color.GRAY);
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.anchor = GridBagConstraints.CENTER;
-        this.add(panelPrincipal,constraints);
-
-        escucha = new Escucha();
         botonSalir.addActionListener(escucha);
         botonJugar.addActionListener(escucha);
-    }
 
-    public void reset(String clave) {
-        this.clave = clave;
-        repaint();
+        timer = new Timer(5000, escucha);
     }
 
     /**
@@ -119,22 +112,33 @@ public class GUI extends JFrame {
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
     private class Escucha implements ActionListener {
-        JTextField cajaTexto;
-        private String clave;
+        private int counter;
+        private Random random;
+        public Escucha(){
+            random = new Random();
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-          if (e.getSource()==botonJugar){
-              cajaTexto = new JTextField("Ingrese su alias");
-              cajaTexto.setBounds(230,100,200,30);
-              //cajaTexto.getText();
-              cajaTexto.setHorizontalAlignment(JTextField.CENTER);
-              panelPrincipal.add(cajaTexto);
-              //panelPrincipal.repaint();
-              }
+            System.out.println("El timer esta corriendo?" + String.valueOf(timer.isRunning()));
+            if (e.getSource()==botonJugar) {
+                counter = 0;
+                timer.start();
+                if (e.getSource() == timer) {
+                    if (counter <= 10) {
+                        counter++;
+                        botonJugar.setEnabled(false);
+                        panelPalabras.pintarTexto(controlIKnowThatWorld.getPalabra());
 
-          else if (e.getSource()==botonSalir){
-              System.exit(0); //cierra el programa
-          }
+                        panelPalabras.repaint();
+                    } else {
+                        timer.stop();
+                    }
+                }
+            }
+            else if (e.getSource() == botonSalir) {
+                System.exit(0); //cierra el programa
+            }
         }
     }
 }

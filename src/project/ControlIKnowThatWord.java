@@ -1,21 +1,21 @@
 package project;
 
-public class ControlIKnowThatWorld {
+public class ControlIKnowThatWord {
     private Diccionario palabras;
-    private String palabra, clave, errores;
+    private String palabra, errores;
     private int conteoErrores;
     private boolean fallo, ganar;
 
     /**
      * Constructor de la clase
      */
-    public ControlIKnowThatWorld() {
+    public ControlIKnowThatWord() {
         palabras = new Diccionario();
     }
 
     public String pintarPalabra() {
         //initialization de las variables de control de la ronda de juego
-        clave = "";
+        //clave = "";
         palabra = palabras.obtenerPalabra(); //Obtiene/Saca aleatoriamente la palabra por medio del metodo obtenerPalabra de la clase Diccionario
         errores = "Palabras erroneas: ";
         conteoErrores = 0;
@@ -25,14 +25,14 @@ public class ControlIKnowThatWorld {
 
     public String validarPalabra(String frase) {
         fallo = false;
-        int index = palabra.indexOf(frase); //recibe la frase y busca la primera incidencia que encuentra de esa palabra en la cadena "palabra" y me devuelve el indice de esa primera incidencia
+        int index = this.palabra.indexOf(frase); //recibe la frase y busca la primera incidencia que encuentra de esa palabra en la cadena "palabra" y me devuelve el indice de esa primera incidencia
 
         if (index != -1) {
-            index = palabra.indexOf(frase);
+            index = this.palabra.indexOf(frase);
         }else {
             fallo = true;
             conteoErrores++;
-            errores += frase + "";
+            errores += palabra + "";
 
         }
         return palabra;
@@ -55,10 +55,6 @@ public class ControlIKnowThatWorld {
          */
     }
 
-
-    public String getClave() {
-        return clave;
-    }
 
     public String getErrores() {
         return errores;
