@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.HierarchyBoundsAdapter;
 
 public class PanelPalabras extends JPanel {
-    public static final int WIDTH = 650;
+    public static final int WIDTH = 600;
     public static final int HEIGTH = 330;
     private Font font;
     private String palabra, errores;

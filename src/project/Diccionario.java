@@ -12,8 +12,7 @@ import java.util.Random;
  * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
  */
 public class Diccionario {
-    private ArrayList<String> diccionario = new ArrayList<String>();
-
+    private ArrayList<String> diccionario = new ArrayList<>();
     /**
      * Constructor de la clase
      */
