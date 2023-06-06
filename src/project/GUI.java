@@ -4,9 +4,10 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
+import java.util.*;
+import java.lang.*;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
@@ -19,7 +20,7 @@ import java.util.TimerTask;
 public class GUI extends JFrame {
     private Header headerProject;
     private JButton botonJugar, botonSalir, botonAyuda, botonSi, botonNo;
-    private JTextField nombre, nivel;
+    private JTextField nombre;
     private JLabel etiquetaNombre, etiquetaDificultad;
     private JComboBox dificultad;
     String[] niveles = { "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5", "Nivel 6", "Nivel 7", "Nivel 8", "Nivel 9", "Nivel 10"};
@@ -28,6 +29,9 @@ public class GUI extends JFrame {
     private ModeloIKnowThatWord controlIKnowThatWorld;
     private PanelPalabras panelPalabras;  //Llama el panelPalabras de la clase PanelPalabras
     private FileManager fileManager;
+    private int contadorPalabras;
+    private boolean responderSi;
+    private List<String> palabrasMostradas;
     public static final String Ayuda = "-Al oprimir jugar se mostrar una palabra diferente cada 5 segundos las cuales tendras que \n"
             + " memorizar, luego se mostraran el doble de palabras y tendras que decidir cuales se mostraron y cuales no. \n"
             + "-Deberás presionar 'Si' si la palabra se mostro y 'No' si no fue asi. \n"
@@ -48,6 +52,7 @@ public class GUI extends JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        palabrasMostradas = new ArrayList<>();
     }
 
     /**
@@ -158,7 +163,7 @@ public class GUI extends JFrame {
         botonSi.setFont(new Font("MONOSPACED", Font.BOLD, 30));
         botonSi.setBackground(Color.ORANGE);
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.anchor = GridBagConstraints.CENTER;
@@ -172,7 +177,7 @@ public class GUI extends JFrame {
         botonNo.setFont(new Font("MONOSPACED", Font.BOLD, 30));
         botonNo.setBackground(Color.ORANGE);
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.anchor = GridBagConstraints.CENTER;
@@ -228,20 +233,37 @@ public class GUI extends JFrame {
     private class Escucha implements ActionListener {
         private Timer timer;
         private Random random;
+        private int totalPoints;
         public Escucha(){
+            totalPoints = 0; // Inicializa los puntos totales en 0
             random = new Random();
         }
 
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            fileManager.writer(nombre.getText()); //Cuando se haga (enter), se va a sacar el texto del JTextField y lo guarda en el archivo de juagdores
+            fileManager.writer(nombre.getText()); //Cuando se haga (enter), se va a sacar el texto del JTextField y lo guarda en el archivo de jugadores
             nombre.setText("");
-            if (e.getSource()==botonJugar){
-                cambiarPalabra(); //ejecuta el metodo cambiarPalabra
-            } else if (e.getSource()==botonSalir) {
-                System.exit(0); //Sale del programa
-            } else if (e.getSource()==botonAyuda){
-                JOptionPane.showMessageDialog(null, Ayuda); //Muestra las ayudas
+
+            if (e.getSource() == botonJugar) {
+                cambiarPalabra();
+            } else if (e.getSource() == botonSalir) {
+                System.exit(0); // Sale del programa
+            } else if (e.getSource() == botonAyuda) {
+                JOptionPane.showMessageDialog(null, Ayuda); // Muestra las ayudas
+            } else if  (e.getSource() == botonSi && responderSi) {
+                // Realiza la acción correspondiente al responder "Si"
+                totalPoints++;
+                //String palabraActual = controlIKnowThatWorld.pintarPalabra();
+                /*
+                if (palabrasMostradas.contains(palabraActual)) {
+                    totalPoints++; // Incrementa los puntos totales si la palabra se mostró anteriormente
+                }
+                 */
+            } else if (e.getSource() == botonNo && !responderSi){
+                // Realiza la acción correspondiente al responder "No"
+                totalPoints--;
+                totalPoints++;
             }
         }
 
@@ -249,18 +271,41 @@ public class GUI extends JFrame {
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 private int count = 0;
+
                 @Override
                 public void run() {
-                    if (count>=10) {
+                    if (count >= 10) {
                         timer.cancel();
+                        cambiarEstadoJuego();
                         return;
                     }
 
                     Color randomColor = getRandomColor();
-                    panelPalabras.pintarTexto(controlIKnowThatWorld.pintarPalabra()); //muestra una palabra alatoria
-                    panelPalabras.setBackground(randomColor); //se cambia el color del fondo del panel de las palabras
-                    botonJugar.setEnabled(false); //Se deshabilita el botonJugar
-                    count++;  //aumenta el contador
+
+                    String palabra;
+
+                    if (count < 10) {
+                        palabra = controlIKnowThatWorld.pintarPalabra();
+                        palabrasMostradas.add(palabra); // Agrega la palabra a la lista
+                    } else {
+                        int index = count - 10;
+                        if (index >= palabrasMostradas.size()) {
+                            index = index % palabrasMostradas.size();
+                        }
+                        palabra = palabrasMostradas.get(index);
+                    }
+                    panelPalabras.pintarTexto(palabra);
+                    panelPalabras.setBackground(randomColor);
+                    botonJugar.setEnabled(false);
+                    if (count == 10) {
+                        botonJugar.setVisible(false);
+                        botonSalir.setVisible(false);
+                        botonSi.setVisible(true);
+                        botonNo.setVisible(true);
+                        botonSi.setEnabled(true);
+                        botonNo.setEnabled(true);
+                    }
+                    count++;
                 }
             }, 0, 5000);  //La palabras se muestran con un intervalo de 5 segundos
         }
@@ -272,6 +317,91 @@ public class GUI extends JFrame {
             int g = random.nextInt(256);
             int b = random.nextInt(256);
             return new Color(r,g,b);
+        }
+        private void cambiarEstadoJuego() {
+            panelPalabras.pintarTexto(""); // Borra la palabra mostrada
+            botonSi.setEnabled(true);
+            botonNo.setEnabled(true);
+            botonJugar.setVisible(false);
+            botonSalir.setVisible(false);
+            responderSi = true; // Cambia el estado del juego a responder "Si"
+
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                private int count = 0;
+
+                @Override
+                public void run() {
+                    if (count >= 20) {
+                        timer.cancel();
+                        mostrarTotalPuntos();
+                        //reiniciarJuego();
+                        botonSi.setVisible(false);
+                        botonNo.setVisible(false);
+                        botonJugar.setVisible(true);
+                        botonSalir.setVisible(true);
+                        return;
+                    }
+
+                    Color randomColor = getRandomColor();
+                    String palabra;
+
+                    if (count < 10) {
+                        palabra = palabrasMostradas.get(count);
+                    } else {
+                        palabra = controlIKnowThatWorld.pintarPalabra();
+                        palabrasMostradas.add(palabra);
+                    }
+
+                    panelPalabras.pintarTexto(palabra);
+                    panelPalabras.setBackground(randomColor);
+
+                    // Cambiar los botones Jugar y Salir por los botones Si y No después de mostrar las primeras 10 palabras
+                    if (count == 0) {
+                        botonSi.setEnabled(true);
+                        botonNo.setEnabled(true);
+                    }
+
+                    // Restablecer los botones Si y No después de mostrar las 20 palabras
+                    if (count == 20) {
+                        botonSi.setVisible(true);
+                        botonNo.setVisible(true);
+                        botonJugar.setVisible(false);
+                        botonSalir.setVisible(false);
+                    }
+
+                    count++;
+                }
+            }, 0, 7000);  // Las siguientes 10 palabras se muestran con un intervalo de 7 segundos
+        }
+        private void reiniciarJuego() {
+            contadorPalabras = 0;
+            responderSi = false; // Cambia el estado del juego a mostrar palabras
+            botonSi.setEnabled(false);
+            botonNo.setEnabled(false);
+            botonJugar.setVisible(true);
+            botonSalir.setVisible(true);
+            botonJugar.setEnabled(true);
+        }
+        public int getPuntos() {
+            return totalPoints;
+        }
+        private void mostrarTotalPuntos() {
+            panelResultados.removeAll();
+            JLabel labelPuntos = new JLabel("Puntos totales: " + totalPoints);
+            labelPuntos.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
+            if (totalPoints>=14){
+                JLabel labelGanaste = new JLabel("¡GANASTE!");
+                labelGanaste.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
+                panelResultados.add(labelGanaste);
+            }else{
+                JLabel labelPerdiste = new JLabel("¡Oh Peridiste! :(");
+                labelPerdiste.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
+                panelResultados.add(labelPerdiste);
+            }
+            panelResultados.add(labelPuntos);
+            panelResultados.revalidate();
+            panelResultados.repaint();
         }
     }
 }

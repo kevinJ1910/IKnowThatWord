@@ -11,10 +11,14 @@ public class PanelPalabras extends JPanel {
     public static final int HEIGTH = 330;
     private Font font;
     private String palabra, errores;
+    private ArrayList<String> palabras;
+    private int indiceActual;
 
     //Constructor de la clase
     public PanelPalabras(String palabra){  //Trae la palabra
         this.palabra = "";
+        palabras = new ArrayList<>();
+        indiceActual = 0;
         font = new Font(Font.SERIF, Font.BOLD + Font.ITALIC,70);
         this.setBackground(new Color(128,128,155));
         setPreferredSize(new Dimension(WIDTH, HEIGTH));  //Establece el tamaño por defecto del panel

@@ -1,11 +1,12 @@
 package project;
 
+import java.util.List;
+
 public class ModeloIKnowThatWord {
     private Diccionario palabras, jugadores;
     private String palabra, errores;
     private int conteoErrores;
     private boolean fallo, ganar;
-
     /**
      * Constructor de la clase
      */
@@ -55,8 +56,6 @@ public class ModeloIKnowThatWord {
         return ganar;
          */
     }
-
-
 
     public String getErrores() {
         return errores;
