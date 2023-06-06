@@ -67,8 +67,10 @@ public class ControlIKnowThatWord {
     public boolean isFallo() {
         return fallo;
     }
-
+/*
     public String getPalabra() {
         return palabra;
     }
+
+ */
 }

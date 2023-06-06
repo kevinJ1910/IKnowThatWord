@@ -6,6 +6,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This class is used for ...
@@ -16,11 +21,17 @@ import java.util.Random;
  */
 public class GUI extends JFrame {
     private Header headerProject;
-    private JButton botonJugar, botonSalir, botonSi, botonNo;
+    private JButton botonJugar, botonSalir, botonSi, botonNo, botonSiguienteNivel;
     private Escucha escucha;
     private Timer timer;
     private ControlIKnowThatWord controlIKnowThatWorld;
     private PanelPalabras panelPalabras;  //Llama el panelPalabras de la clase PanelPalabras
+    private  List<String> palabrasMostradas;
+    private boolean primerJuego;
+    private int contadorPalabras;
+    private int contadorPuntos;
+    private Diccionario diccionario;
+
     /**
      * Constructor of GUI class
      */
@@ -93,7 +104,46 @@ public class GUI extends JFrame {
         botonSalir.addActionListener(escucha);
         botonJugar.addActionListener(escucha);
 
-        timer = new Timer(5000, escucha);
+        botonSi = new JButton("Si");
+        botonSi.setPreferredSize(new Dimension(325, 50));
+        botonSi.setFont(new Font("MONOSPACED", Font.BOLD, 30));
+        botonSi.setBackground(Color.ORANGE);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        botonSi.setEnabled(false); // Botón desactivado al inicio
+        botonSi.addActionListener(escucha);
+        this.add(botonSi, constraints);
+
+        botonNo = new JButton("No");
+        botonNo.setPreferredSize(new Dimension(325, 50));
+        botonNo.setFont(new Font("MONOSPACED", Font.BOLD, 30));
+        botonNo.setBackground(Color.ORANGE);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        botonNo.setEnabled(false); // Botón desactivado al inicio
+        botonNo.addActionListener(escucha);
+        this.add(botonNo, constraints);
+
+        botonSiguienteNivel = new JButton("Siguiente Nivel");
+        botonSiguienteNivel.setPreferredSize(new Dimension(650, 50));
+        botonSiguienteNivel.setFont(new Font("MONOSPACED", Font.BOLD, 30));
+        botonSiguienteNivel.setBackground(Color.ORANGE);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+        botonSiguienteNivel.setVisible(false); // Botón oculto al inicio
+        botonSiguienteNivel.addActionListener(escucha);
+        this.add(botonSiguienteNivel, constraints);
+
+
     }
 
     /**
@@ -112,7 +162,7 @@ public class GUI extends JFrame {
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
     private class Escucha implements ActionListener {
-        private int counter;
+        private Timer timer;
         private Random random;
         public Escucha(){
             random = new Random();
@@ -120,25 +170,42 @@ public class GUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("El timer esta corriendo?" + String.valueOf(timer.isRunning()));
-            if (e.getSource()==botonJugar) {
-                counter = 0;
-                timer.start();
-                if (e.getSource() == timer) {
-                    if (counter <= 10) {
-                        counter++;
-                        botonJugar.setEnabled(false);
-                        panelPalabras.pintarTexto(controlIKnowThatWorld.getPalabra());
+            if (e.getSource()==botonJugar){
+                cambiarColor();
+                botonJugar.setEnabled(false);
+            } else if (e.getSource()==botonSalir) {
+                System.exit(0);
+            }
+        }
 
-                        panelPalabras.repaint();
-                    } else {
-                        timer.stop();
+        private void cambiarColor() {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                private int count = 0;
+                @Override
+                public void run() {
+                    if (count>=10) {
+                        timer.cancel();
+                        return;
                     }
+
+                    Color randomColor = getRandomColor();
+                    String nuevaPalabra = controlIKnowThatWorld.pintarPalabra();
+                    panelPalabras.pintarTexto(nuevaPalabra);
+                    panelPalabras.setBackground(randomColor);
+                    botonJugar.setEnabled(false);
+                    count++;
                 }
-            }
-            else if (e.getSource() == botonSalir) {
-                System.exit(0); //cierra el programa
-            }
+            }, 0, 5000);
+        }
+
+
+        private Color getRandomColor() {
+
+            int r = random.nextInt(256);
+            int g = random.nextInt(256);
+            int b = random.nextInt(256);
+            return new Color(r,g,b);
         }
     }
 }
