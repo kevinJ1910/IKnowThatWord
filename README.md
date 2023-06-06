@@ -26,4 +26,4 @@ Tras la serie de palabras a memorizar, el juego presentará un listado con el do
 - Cuando se acaben de mostrar estas palabras, inmediatamente el titulo del panel cambiara a "Selecciona las palabras" y apareceran los botones "Si" y "No", todo esto para que sepas que comenzo el modo de juego de seleccionar las palabras mostradas.
 - Al final de la ronda se mostraran los puntos que obtuviste y si ganaste o perdiste.
 - Si quieres jugar otra ronda vuelve a oprimir el boton jugar.
-- Finalmente si quieres salir del juego, oprime el boton sali.
+- Finalmente si quieres salir del juego, oprime el boton salir.
