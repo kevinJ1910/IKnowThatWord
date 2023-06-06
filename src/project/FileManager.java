@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 public class FileManager {
     public static final String PATH = "src/project/files/diccionario.txt";
-    private FileReader fileReader;
-    private BufferedReader input;
+    public static final String PATHJugadores = "src/project/files/jugadores.txt";
+
+    private FileReader fileReader, fileReaderJugadores;
+    private BufferedReader input, inputJugadores;
     private FileWriter fileWriter;
     private BufferedWriter output;
 
@@ -36,15 +38,48 @@ public class FileManager {
         return palabras;
     }
 
-    public void escribirTexto(String linea) {
+    public String reader(){
+        String text = "";
+
         try {
-            fileWriter = new FileWriter(PATH, true);
-            output = new BufferedWriter(fileWriter);
-            output.write(linea);
-            output.newLine();
+            fileReader = new FileReader("src/project/files/jugadores.txt");
+            input = new BufferedReader(fileReader);
+            String line = input.readLine();
+
+            while(line != null){
+                text += line;
+                text += "\n";
+                line = input.readLine();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Estoy dentro de la excepcion");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            try {
+                input.close();
+            }  catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
+                System.out.println("Estoy dentro del finally");
+                e.printStackTrace();
+            }
+        }
+
+        return text;
+    }
+
+    public void writer(String line){
+        try {
+            String text = reader();
+            text += line + "\n";
+            fileWriter = new FileWriter("src/project/files/jugadores.txt");
+            output = new BufferedWriter(fileWriter);
+            output.write(text);
+        } catch (IOException e){
+            e.printStackTrace();
+        }finally {
             try {
                 output.close();
             } catch (IOException e) {

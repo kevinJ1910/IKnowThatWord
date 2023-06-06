@@ -12,19 +12,26 @@ import java.util.Random;
  * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
  */
 public class Diccionario {
-    private ArrayList<String> diccionario = new ArrayList<String>();
+    private ArrayList<String> diccionarioPalabras = new ArrayList<String>();
+    private String diccionarioJugadores = new String();
 
     /**
      * Constructor de la clase
      */
     public Diccionario() {
         FileManager fileManager = new FileManager(); //Usa el fileManger que creamos
-        diccionario = fileManager.lecturaFile();
+        diccionarioPalabras = fileManager.lecturaFile();
+
+        //diccionarioJugadores = fileManager.lecturaJugadores();
     }
 
     public String obtenerPalabra() {
         Random aleatorio = new Random();
 
-        return diccionario.get(aleatorio.nextInt(diccionario.size())); //Devuelve el String que está contenido en la position de la lista usando un random
+        return diccionarioPalabras.get(aleatorio.nextInt(diccionarioPalabras.size())); //Devuelve el String que está contenido en la position de la lista usando un random
+    }
+
+    public String obtenerDiccionarioJugadores() {
+        return diccionarioJugadores;
     }
 }

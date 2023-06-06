@@ -256,7 +256,7 @@ jueves
 viernes
 sábado
 domingo
-Espacio
+espacio
 ambiente
 espacio
 entorno

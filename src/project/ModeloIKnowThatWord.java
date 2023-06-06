@@ -1,7 +1,7 @@
 package project;
 
-public class ControlIKnowThatWord {
-    private Diccionario palabras;
+public class ModeloIKnowThatWord {
+    private Diccionario palabras, jugadores;
     private String palabra, errores;
     private int conteoErrores;
     private boolean fallo, ganar;
@@ -9,7 +9,7 @@ public class ControlIKnowThatWord {
     /**
      * Constructor de la clase
      */
-    public ControlIKnowThatWord() {
+    public ModeloIKnowThatWord() {
         palabras = new Diccionario();
     }
 
@@ -29,7 +29,7 @@ public class ControlIKnowThatWord {
 
         if (index != -1) {
             index = this.palabra.indexOf(frase);
-        }else {
+        } else {
             fallo = true;
             conteoErrores++;
             errores += palabra + "";
@@ -38,10 +38,11 @@ public class ControlIKnowThatWord {
         return palabra;
     }
 
+    //Determina si el jugador gane el nivel
     public boolean esGanador() {
         if (palabra.indexOf(" ") == -1) {
             ganar = true;
-        }else{
+        } else {
             ganar = false;
         }
         return ganar;
@@ -56,6 +57,7 @@ public class ControlIKnowThatWord {
     }
 
 
+
     public String getErrores() {
         return errores;
     }
@@ -67,10 +69,5 @@ public class ControlIKnowThatWord {
     public boolean isFallo() {
         return fallo;
     }
-/*
-    public String getPalabra() {
-        return palabra;
-    }
 
- */
 }
