@@ -3,10 +3,15 @@ package project;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Esta clase nos ayuda a leer las palabras del diccionario y nos ayuda a guardar y leer los jugadores.
+ *
+ * @version v.1.0.0 date:28/05/2023
+ * @autor Kevin Jordan Alzate kevin.jordan@correounivalle.edu.co
+ * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
+ */
 public class FileManager {
     public static final String PATH = "src/project/files/diccionario.txt";
-    public static final String PATHJugadores = "src/project/files/jugadores.txt";
-
     private FileReader fileReader, fileReaderJugadores;
     private BufferedReader input, inputJugadores;
     private FileWriter fileWriter;

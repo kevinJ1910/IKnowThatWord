@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Esta clase es usada para acceder a las palabras.
+ * Esta clase es usada para acceder a las palabras y a los jugadores.
  * Obitene las palabras
  *
  * @version v.1.0.0 date:28/05/2023

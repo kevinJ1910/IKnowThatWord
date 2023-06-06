@@ -11,13 +11,13 @@ import java.util.Timer;
 
 
 /**
- * This class is used for ...
+ * Clase principal
  *
  * @version v.1.0.0 date:28/05/2023
  * @autor Kevin Jordan Alzate kevin.jordan@correounivalle.edu.co
  * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
  */
-public class GUI extends JFrame {
+public class GUIIKnowThatWord extends JFrame {
     private Header headerProject;
     private JButton botonJugar, botonSalir, botonAyuda, botonSi, botonNo;
     private JTextField nombre;
@@ -40,7 +40,7 @@ public class GUI extends JFrame {
     /**
      * Constructor of GUI class
      */
-    public GUI() {
+    public GUIIKnowThatWord() {
         initGUI();
 
         //Default JFrame configuration
@@ -223,7 +223,7 @@ public class GUI extends JFrame {
      */
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            GUI miProjectGUI = new GUI();
+            GUIIKnowThatWord miProjectGUI = new GUIIKnowThatWord();
         });
     }
 
@@ -239,34 +239,53 @@ public class GUI extends JFrame {
             random = new Random();
         }
 
-
+        /**
+         *Se agregan las acciones correspondientes de los botones
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             fileManager.writer(nombre.getText()); //Cuando se haga (enter), se va a sacar el texto del JTextField y lo guarda en el archivo de jugadores
             nombre.setText("");
 
             if (e.getSource() == botonJugar) {
+                panelResultados.setBorder(BorderFactory.createTitledBorder(null, "Resultados", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
                 cambiarPalabra();
             } else if (e.getSource() == botonSalir) {
                 System.exit(0); // Sale del programa
             } else if (e.getSource() == botonAyuda) {
                 JOptionPane.showMessageDialog(null, Ayuda); // Muestra las ayudas
             } else if  (e.getSource() == botonSi && responderSi) {
+                String palabraActual = panelPalabras.obtenerTexto();
+                if (palabrasMostradas.contains(palabraActual)) {
+                    totalPoints++; // Incrementar los puntos si la palabra se mostró anteriormente
+                }else{
+                    totalPoints++;
+                    totalPoints--;
+                }
                 // Realiza la acción correspondiente al responder "Si"
-                totalPoints++;
+                //totalPoints++;
                 //String palabraActual = controlIKnowThatWorld.pintarPalabra();
                 /*
                 if (palabrasMostradas.contains(palabraActual)) {
                     totalPoints++; // Incrementa los puntos totales si la palabra se mostró anteriormente
                 }
                  */
-            } else if (e.getSource() == botonNo && !responderSi){
+            } else if (e.getSource() == botonNo && responderSi){
                 // Realiza la acción correspondiente al responder "No"
-                totalPoints--;
-                totalPoints++;
+                String palabraActual = panelPalabras.obtenerTexto();
+                if (palabrasMostradas.contains(palabraActual)){
+                    totalPoints++;
+                    totalPoints--;
+                }else {
+                    totalPoints++;
+                }
+
             }
         }
 
+        /**
+         * La palabras se muestran con un intervalo de 5 segundos
+         */
         private void cambiarPalabra() {
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -310,18 +329,27 @@ public class GUI extends JFrame {
             }, 0, 5000);  //La palabras se muestran con un intervalo de 5 segundos
         }
 
-
-        private Color getRandomColor() {  //Obtiene el un color alatorio
+        /**
+         * Obtiene el un color alatorio
+         */
+        private Color getRandomColor() {
 
             int r = random.nextInt(256);
             int g = random.nextInt(256);
             int b = random.nextInt(256);
             return new Color(r,g,b);
         }
+        /**
+         * Cambia el estado de memorizar palabras a estado de juego (Se muestran las palabras para elegir si se mostraron anteriormente o no).
+         */
         private void cambiarEstadoJuego() {
+            //panelPalabras.setBorder(BorderFactory.createTitledBorder(null, "Selecciona las Palabras", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
+
             panelPalabras.pintarTexto(""); // Borra la palabra mostrada
             botonSi.setEnabled(true);
             botonNo.setEnabled(true);
+            botonSi.setVisible(true);
+            botonNo.setVisible(true);
             botonJugar.setVisible(false);
             botonSalir.setVisible(false);
             responderSi = true; // Cambia el estado del juego a responder "Si"
@@ -335,11 +363,12 @@ public class GUI extends JFrame {
                     if (count >= 20) {
                         timer.cancel();
                         mostrarTotalPuntos();
-                        //reiniciarJuego();
                         botonSi.setVisible(false);
                         botonNo.setVisible(false);
                         botonJugar.setVisible(true);
                         botonSalir.setVisible(true);
+                        botonJugar.setEnabled(true);
+                        //reiniciarJuego();
                         return;
                     }
 
@@ -347,10 +376,11 @@ public class GUI extends JFrame {
                     String palabra;
 
                     if (count < 10) {
+                        panelPalabras.setBorder(BorderFactory.createTitledBorder(null, "Selecciona las Palabras", TitledBorder.CENTER, TitledBorder.DEFAULT_JUSTIFICATION, new Font(Font.MONOSPACED, Font.PLAIN, 20), Color.orange));
                         palabra = palabrasMostradas.get(count);
                     } else {
                         palabra = controlIKnowThatWorld.pintarPalabra();
-                        palabrasMostradas.add(palabra);
+                        //palabrasMostradas.add(palabra);
                     }
 
                     panelPalabras.pintarTexto(palabra);
@@ -382,6 +412,7 @@ public class GUI extends JFrame {
             botonJugar.setVisible(true);
             botonSalir.setVisible(true);
             botonJugar.setEnabled(true);
+
         }
         public int getPuntos() {
             return totalPoints;
@@ -394,10 +425,12 @@ public class GUI extends JFrame {
                 JLabel labelGanaste = new JLabel("¡GANASTE!");
                 labelGanaste.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
                 panelResultados.add(labelGanaste);
+                totalPoints=0;
             }else{
                 JLabel labelPerdiste = new JLabel("¡Oh Peridiste! :(");
                 labelPerdiste.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
                 panelResultados.add(labelPerdiste);
+                totalPoints=0;
             }
             panelResultados.add(labelPuntos);
             panelResultados.revalidate();

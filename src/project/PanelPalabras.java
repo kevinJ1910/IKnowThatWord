@@ -2,10 +2,15 @@ package project;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.HierarchyBoundsAdapter;
 import java.util.*;
-import java.util.Timer;
 
+/**
+ * Esta clase pinta las palabras a memorizar.
+ *
+ * @version v.1.0.0 date:28/05/2023
+ * @autor Kevin Jordan Alzate kevin.jordan@correounivalle.edu.co
+ * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
+ */
 public class PanelPalabras extends JPanel {
     public static final int WIDTH = 600;
     public static final int HEIGTH = 330;
@@ -35,9 +40,17 @@ public class PanelPalabras extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        if (palabra != null) {
+            g.setColor(Color.BLACK);
+            g.setFont(font);
+            g.drawString(palabra, WIDTH / 3, HEIGTH / 2);
+        }
+/*
         g.setFont(font);
         g.setColor(new Color(0, 0, 0));
         g.drawString(palabra, WIDTH/3, HEIGTH / 2); //Pintal al palabra y la ubica en el centro
+
+ */
     }
 
     public void reset(String palabra){  //restablece el juego al inicio
@@ -46,4 +59,7 @@ public class PanelPalabras extends JPanel {
         repaint();
     }
 
+    public String obtenerTexto() {
+        return palabra;
+    }
 }

@@ -2,6 +2,13 @@ package project;
 
 import java.util.List;
 
+/**
+ * Esta clse implementa el modelo para la lógica del juego.
+ *
+ * @version v.1.0.0 date:28/05/2023
+ * @autor Kevin Jordan Alzate kevin.jordan@correounivalle.edu.co
+ * @autor Junior Cantor Arevalo junior.cantor@correounivalle.edu.co
+ */
 public class ModeloIKnowThatWord {
     private Diccionario palabras, jugadores;
     private String palabra, errores;
