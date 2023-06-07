@@ -24,13 +24,17 @@ public class Diccionario {
 
         //diccionarioJugadores = fileManager.lecturaJugadores();
     }
-
+    /**
+     * retorna una palabra alaeatoria de diccionario.txt
+     */
     public String obtenerPalabra() {
         Random aleatorio = new Random();
 
         return diccionarioPalabras.get(aleatorio.nextInt(diccionarioPalabras.size())); //Devuelve el String que está contenido en la position de la lista usando un random
     }
-
+    /**
+     * retorna los jugadores ingresados
+     */
     public String obtenerDiccionarioJugadores() {
         return diccionarioJugadores;
     }

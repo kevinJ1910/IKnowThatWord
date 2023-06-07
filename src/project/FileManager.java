@@ -16,7 +16,9 @@ public class FileManager {
     private BufferedReader input, inputJugadores;
     private FileWriter fileWriter;
     private BufferedWriter output;
-
+    /**
+     * Lee las palabras del diccionario.txt
+     */
     public ArrayList<String> lecturaFile() {
         ArrayList<String> palabras = new ArrayList<String>(); //crea una coleccion de elementos que van a albergar como informacion un String y va a tener una referencia a otro elemnto del mismmo tipo
 
@@ -42,7 +44,9 @@ public class FileManager {
         }
         return palabras;
     }
-
+    /**
+     * Lee el alias del jugador ingresado
+     */
     public String reader(){
         String text = "";
 
@@ -74,7 +78,9 @@ public class FileManager {
 
         return text;
     }
-
+    /**
+     * Escribe el alias del jugador en jugadores.txt
+     */
     public void writer(String line){
         try {
             String text = reader();

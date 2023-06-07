@@ -9,9 +9,8 @@ import java.lang.*;
 import java.util.List;
 import java.util.Timer;
 
-
 /**
- * Clase principal
+ * Clase principal, inicia gui y gestiona escuchas
  *
  * @version v.1.0.0 date:28/05/2023
  * @autor Kevin Jordan Alzate kevin.jordan@correounivalle.edu.co
@@ -228,7 +227,7 @@ public class GUIIKnowThatWord extends JFrame {
     }
 
     /**
-     * inner class that extends an Adapter Class or implements Listeners used by GUI class
+     * Clase escucha
      */
     private class Escucha implements ActionListener {
         private Timer timer;
@@ -414,9 +413,9 @@ public class GUIIKnowThatWord extends JFrame {
             botonJugar.setEnabled(true);
 
         }
-        public int getPuntos() {
-            return totalPoints;
-        }
+        /**
+         * Muestra punto obtenidos en la ronda
+         */
         private void mostrarTotalPuntos() {
             panelResultados.removeAll();
             JLabel labelPuntos = new JLabel("Puntos totales: " + totalPoints);
