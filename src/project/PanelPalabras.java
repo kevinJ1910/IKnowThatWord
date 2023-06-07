@@ -19,7 +19,9 @@ public class PanelPalabras extends JPanel {
     private ArrayList<String> palabras;
     private int indiceActual;
 
-    //Constructor de la clase
+    /**
+     * Constructor of GUI class
+     */
     public PanelPalabras(String palabra){  //Trae la palabra
         this.palabra = "";
         palabras = new ArrayList<>();
@@ -29,13 +31,17 @@ public class PanelPalabras extends JPanel {
         setPreferredSize(new Dimension(WIDTH, HEIGTH));  //Establece el tamaño por defecto del panel
 
     }
-
+    /**
+     * Pinta la palabra en el panel
+     */
     public void pintarTexto(String palabra) {  //pinta la palabra
         this.palabra = palabra;
         repaint();
     }
 
-
+    /**
+     * Pinta la palabra en el panel
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -45,20 +51,18 @@ public class PanelPalabras extends JPanel {
             g.setFont(font);
             g.drawString(palabra, WIDTH / 3, HEIGTH / 2);
         }
-/*
-        g.setFont(font);
-        g.setColor(new Color(0, 0, 0));
-        g.drawString(palabra, WIDTH/3, HEIGTH / 2); //Pintal al palabra y la ubica en el centro
-
- */
     }
-
-    public void reset(String palabra){  //restablece el juego al inicio
+    /**
+     * restablece el juego al inicio
+     */
+    public void reset(String palabra){
         this.palabra = palabra;
         errores = " ";
         repaint();
     }
-
+    /**
+     * Obtiene palabra que se va a pintar
+     */
     public String obtenerTexto() {
         return palabra;
     }
